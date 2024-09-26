@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Http;
 use Illuminate\Http\Request;
 use Storage;
+use Str;
 
 class BlogController extends Controller
 {
@@ -26,8 +27,6 @@ class BlogController extends Controller
             ->where("isdeleted", false)
             ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
             ->paginate(20);
-
-
 
         $returnData = [];
 
@@ -61,34 +60,38 @@ class BlogController extends Controller
 
     public function store(BlogStoreRequest $request)
     {
-        $filldata = [];
-        if ($request->file('image')) {
-            $image = $this->uploadImage($request->file('image'));
-            $filldata = [
-                "user_id" => auth()->user()->id,
-                "title" => $request->title,
-                "description" => $request->description,
-                "photo" => $image,
-                "parent_category" => $request->category,
-                "tag" => $request->tag,
-                "child_category" => $request->sub_category
-            ];
+        $slug = null;
+        if ($request->slug) {
+            $isBlogExist = Blog::where("slug", $request->slug)->first();
+            if ($isBlogExist) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Blog with this slug already exist",
+                ]);
+            } else {
+                $slug = $request->slug;
+            }
         } else {
-            $filldata = [
-                "user_id" => auth()->user()->id,
-                "title" => $request->title,
-                "description" => $request->description,
-                "parent_category" => $request->category,
-                "tag" => $request->tag,
-                "child_category" => $request->sub_category
-            ];
+            $slug = $this->slug($request->title);
+
         }
+        $filldata = [
+            "user_id" => auth()->user()->id,
+            "title" => $request->title,
+            "description" => $request->description,
+            "photo" => $request->file('image') ? $this->uploadImage($request->file('image')) : null,
+            "parent_category" => $request->category,
+            "tag" => $request->tag,
+            "child_category" => $request->sub_category,
+            "slug" => $slug
+        ];
 
         $sendData = [
             "subject" => "New blog created",
             "title" => $request->title,
             "description" => $request->description
         ];
+
         $blog = Blog::create($filldata);
         // Http::post("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzNTA0MzI1MjZlNTUzMDUxMzQi_pc", $sendData);
         return response()->json([
@@ -204,5 +207,14 @@ class BlogController extends Controller
                 "meta.robots" => "noindex, nofollow"
             ]
         ]);
+    }
+    protected function slug($title)
+    {
+        $slug = Str::slug($title);
+        $isBlogExist = Blog::where("slug", $slug)->first();
+        if ($isBlogExist) {
+            $slug = $slug . "-" . rand(1000, 9999);
+        }
+        return $slug;
     }
 }

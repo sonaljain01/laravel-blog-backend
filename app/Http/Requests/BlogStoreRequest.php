@@ -11,7 +11,7 @@ class BlogStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if(auth()->check()) {
+        if (auth()->check()) {
             return true;
         }
         return false;
@@ -30,11 +30,13 @@ class BlogStoreRequest extends FormRequest
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
             "category" => "required|string|exists:parent_categories,id",
             "tag" => "required|string|exists:tags,id",
-            "sub_category" => "required|string|exists:child_categories,id"
+            "sub_category" => "required|string|exists:child_categories,id",
+            "slug" => "nullable|unique:blogs,slug|string|max:255",
         ];
     }
 
-    public function messages(): array {
+    public function messages(): array
+    {
         return [
             'title.required' => 'Title is required',
             'title.max' => 'Title is too long',
