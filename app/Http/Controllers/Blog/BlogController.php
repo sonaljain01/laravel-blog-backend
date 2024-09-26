@@ -33,6 +33,7 @@ class BlogController extends Controller
         foreach ($blogs as $blog) {
             $returnData[] = [
                 "id" => $blog->id,
+                "slug"=> $blog->slug,
                 "title" => $blog->title,
                 "description" => $blog->description,
                 "photo" => $blog->photo,
