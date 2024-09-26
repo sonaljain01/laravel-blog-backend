@@ -18,7 +18,8 @@ class Blog extends Model
         "photo",
         "parent_category",
         "tag",
-        "child_category"
+        "child_category",
+        "slug"
     ];
 
     public function users()
