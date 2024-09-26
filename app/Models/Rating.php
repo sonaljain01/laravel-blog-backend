@@ -17,13 +17,13 @@ class Rating extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 
     public function blog()
     {
-        return $this->belongsTo(Blog::class);
+        return $this->belongsTo(Blog::class, 'blog_id');
     }
 
 }
