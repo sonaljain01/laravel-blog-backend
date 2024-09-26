@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CatrgoryController;
 use App\Http\Controllers\ChildCatrgoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\RatingController;
 
 Route::get("/", function () {
     return response()->json([
@@ -72,6 +73,14 @@ Route::group(["prefix" => "comment"], function () {
         Route::post("create", [CommentController::class, "store"]);
         Route::post("update/{id}", [CommentController::class, "update"]);
         Route::post("delete/{id}", [CommentController::class, "destroy"]);
+    });
+});
+
+Route::group(["prefix" => "rating"], function () {
+    Route::group(["middleware" => "auth:api"], function () {
+        Route::get("/{id}", [RatingController::class, "display"]);
+        Route::get("avg/{id}", [RatingController::class, "displayavgRating"]);
+        Route::post("create", [RatingController::class, "store"]);
     });
 });
 

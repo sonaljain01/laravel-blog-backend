@@ -73,7 +73,6 @@ class BlogController extends Controller
             }
         } else {
             $slug = $this->slug($request->title);
-
         }
         $filldata = [
             "user_id" => auth()->user()->id,
