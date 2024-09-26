@@ -10,6 +10,21 @@ class RatingController extends Controller
 {
     public function display(string $id)
     {
+        // $rating = Rating::with(['blog:id,name', 'users:id,name'])->find($id);
+        $rating = Rating::where('blog_id', $id)->with('users:id,name')->get();
+
+        if (count($rating) == 0) {
+            return response()->json([
+                "status" => false,
+                "message" => "Rating not found",
+            ]);
+        }
+
+        return response()->json([
+            "status" => true,
+            "message" => "Rating found successfully",
+            "data" => $rating
+        ]);
     }
     public function store(RatingRequest $request)
     {
