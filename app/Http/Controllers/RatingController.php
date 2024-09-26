@@ -27,7 +27,12 @@ class RatingController extends Controller
     }
     public function store(RatingRequest $request)
     {
-        $rating = Rating::create($request->all());
+        $fillData = [
+            "blog_id" => $request->blog_id,
+            "rating" => $request->rating,
+            "user_id" => auth()->user()->id
+        ];
+        $rating = Rating::create($fillData);
         if (!$rating) {
             return response()->json([
                 "status" => false,
@@ -46,14 +51,22 @@ class RatingController extends Controller
     {
         $avg = 0;
         $rating = Rating::where('blog_id', $id)->with('users:id,name')->get();
-        foreach ($rating as $key => $value) {
-            $avg += $value->rating;
+        if (!count($rating) == 0) {
+            foreach ($rating as $key => $value) {
+                $avg += $value->rating;
+            }
+            $avg = $avg / count($rating);
+            return response()->json([
+                "status" => true,
+                "message" => "Rating found successfully",
+                "data" => $avg
+            ], 200);
         }
-        $avg = $avg / count($rating);
+
         return response()->json([
-            "status" => true,
-            "message" => "Rating found successfully",
+            "status" => false,
+            "message" => "Rating not found",
             "data" => $avg
-        ], 200);
+        ], 404);
     }
 }

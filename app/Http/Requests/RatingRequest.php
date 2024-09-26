@@ -25,9 +25,8 @@ class RatingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rating' => 'required|integer|between:1,5',
+            'rating' => 'required|decimal:1|between:1,5',
             'blog_id' => 'required|integer|exists:blogs,id',
-            'user_id' => 'required|integer|exists:users,id',
         ];
     }
     public function messages(): array
@@ -39,9 +38,6 @@ class RatingRequest extends FormRequest
             'blog_id.required' => 'Blog id is required',
             'blog_id.integer' => 'Blog id must be an integer',
             'blog_id.exists' => 'Blog id does not exist',
-            'user_id.required' => 'User id is required',
-            'user_id.integer' => 'User id must be an integer',
-            'user_id.exists' => 'User id does not exist',
         ];
     }
 }
