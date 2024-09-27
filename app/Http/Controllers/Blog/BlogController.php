@@ -6,6 +6,7 @@ use App\Http\Requests\BlogDeleteRequest;
 use App\Http\Requests\BlogStoreRequest;
 use App\Http\Requests\BlogUpdateRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Storage;
 use Str;
 
@@ -105,29 +106,27 @@ class BlogController extends Controller
         ], 200);
     }
 
-    public function update(BlogUpdateRequest $request)
+    public function update(BlogUpdateRequest $request, string $slug)
     {
-        $blog_id = $request->blog_id;
-        $filldata = [
-            "title" => $request->title,
-            "description" => $request->description,
-            "draft" => $request->input('draft', false),
-            "publish" => $request->input('publish', false),
-        ];
+        $blog = Blog::where('slug', $slug)->where('user_id', auth()->user()->id)->first();
+        if (!$blog) {
+            $this->error = "You are not allowed to update other person blog";
+            return false;
+        }
+        // dd($request->only(['title', 'description', 'category', 'tag', 'sub_category', 'type']));
+
+        $filldata = $request->only(['title', 'description', 'parent_category', 'tag', 'child_category', 'type']);
+
+        if ($request->hasFile('image')) {
+            $filldata['photo'] = $this->uploadImage($request->file('image'));
+        }
         $sendData = [
-            "subject" => "Blog with id." . $blog_id . " updated",
+            "subject" => "Blog with id." . $slug . " updated",
             "title" => $request->title,
             "description" => $request->description
         ];
-        $isBlogExist = Blog::find($blog_id);
-        if (!$isBlogExist) {
-            return response()->json([
-                "status" => false,
-                "message" => "Blog not found",
-            ]);
-        }
 
-        $isUpdate = $isBlogExist->update($filldata);
+        $isUpdate = $blog->update($filldata);
         if (!$isUpdate) {
             return response()->json([
                 "status" => false,
@@ -139,7 +138,7 @@ class BlogController extends Controller
         return response()->json([
             "status" => true,
             "message" => "Blog updated successfully",
-            "data" => Blog::find($blog_id)
+            "data" => $blog->fresh()
         ]);
     }
 
@@ -213,6 +212,7 @@ class BlogController extends Controller
                 "created_at" => $blog->created_at,
                 "created_by" => $blog->users->name,
                 "is_deleted" => $blog->isdeleted,
+                "type" => $blog->type,
                 "seo" => [
                     "meta.name" => $blog->title,
                     "meta.desc" => $blog->description,
