@@ -22,18 +22,17 @@ class BlogController extends Controller
                 "message" => "Please login first",
             ], 401);
         }
-        $id = auth()->user()->id;
-        $blogs = Blog::where("user_id", $id)
-            ->where("isdeleted", false)
+        
+        $blogs = Blog::where("isdeleted", false)
             ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
-            ->paginate(20);
+            ->paginate(10);
 
         $returnData = [];
 
         foreach ($blogs as $blog) {
             $returnData[] = [
                 "id" => $blog->id,
-                "slug"=> $blog->slug,
+                "slug" => $blog->slug,
                 "title" => $blog->title,
                 "description" => $blog->description,
                 "photo" => $blog->photo,
@@ -43,6 +42,9 @@ class BlogController extends Controller
                 "created_at" => $blog->created_at,
                 "created_by" => $blog->users->name,
                 "is_deleted" => $blog->isdeleted,
+                "next_page_url" => $blogs->nextPageUrl(),
+                "previous_page_url" => $blogs->previousPageUrl(),
+                "total" => $blogs->total(),
                 "seo" => [
                     "meta.name" => $blog->title,
                     "meta.desc" => $blog->description,
