@@ -30,6 +30,7 @@ Route::group(["prefix" => "user"], function () {
 
 
 Route::group(["prefix" => "blog"], function () {
+    Route::get("/user", [BlogController::class, "displayuserBlog"]);
     Route::get("/{id}", [BlogController::class, "displaySpecificBlog"]);
     Route::post("create", [BlogController::class, "store"]);
     Route::put("update", [BlogController::class, "update"]);
