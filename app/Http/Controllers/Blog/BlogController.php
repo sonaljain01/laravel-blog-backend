@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Blog;
 use App\Models\Blog;
-use App\Http\Requests\BlogDeleteRequest;
 use App\Http\Requests\BlogStoreRequest;
 use App\Http\Requests\BlogUpdateRequest;
 use App\Http\Controllers\Controller;
@@ -113,7 +112,6 @@ class BlogController extends Controller
             $this->error = "You are not allowed to update other person blog";
             return false;
         }
-        // dd($request->only(['title', 'description', 'category', 'tag', 'sub_category', 'type']));
 
         $filldata = $request->only(['title', 'description', 'parent_category', 'tag', 'child_category', 'type']);
 

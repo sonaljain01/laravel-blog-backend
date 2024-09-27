@@ -8,6 +8,7 @@ use App\Http\Controllers\CatrgoryController;
 use App\Http\Controllers\ChildCatrgoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\UpdateProfileController;
 
 Route::get("/", function () {
     return response()->json([
@@ -26,6 +27,7 @@ Route::group(["prefix" => "auth"], function () {
 Route::group(["prefix" => "user"], function () {
     Route::group(["middleware" => "auth:api"], function () {
         Route::get("profile", [AuthController::class, "profile"]);
+        Route::put("profile/update/{id}", [UpdateProfileController::class, "updateProfile"]);
         Route::get("logout", [AuthController::class, "logout"]);
     });
 });

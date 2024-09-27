@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->boolean('draft')->default(false);
-            $table->boolean('publish')->default(false);
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('profile_image')->nullable();
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->dropColumn(['draft','publish']);
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profile_image');
         });
     }
 };
