@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
@@ -63,6 +62,7 @@ class AuthController extends Controller
     {
         $userdata = auth()->user();
 
+        // $userdata->profile_img_url = $userdata->profile_image ? asset("storage/" . $userdata->profile_image) : null;
         return response()->json([
             "status" => true,
             "message" => "Profile data",
