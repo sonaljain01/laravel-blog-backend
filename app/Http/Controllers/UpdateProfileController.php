@@ -14,12 +14,9 @@ class UpdateProfileController extends Controller
         $user = Auth::user();
         $data = [
             "name" => $request->name,
+            "profile_image" => $request->hasFile('profile_image') ? $this->uploadProfileImage($request->file('profile_image')) : $user->profile_image
         ];
-
-        if($request->hasFile('profile_image')) {
-            $data['profile_image'] = $this->uploadProfileImage($request->file('profile_image'));
-        }
-
+        
         $isUpdate = $user->update(attributes: $data);
         if ($isUpdate) {
             return response()->json([
