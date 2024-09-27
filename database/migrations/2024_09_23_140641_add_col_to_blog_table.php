@@ -11,9 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->foreignId("parent_category")->nullable();
-            $table->foreignId(column: "child_category")->nullable();
-            $table->foreignId(column: "tag")->nullable();
+            $table->foreignId("parent_category");
+            $table->foreignId(column: "child_category");
+            $table->foreignId(column: "tag");
         });
     }
 

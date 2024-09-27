@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth; 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 
-class ApiController extends Controller
+class AuthController extends Controller
 {
-    
+
     //Register API (POST, Formdata)
-    public function register(AuthRequest $request)
+    public function register(RegisterRequest $request)
     {
         $data = [
-            "name"=>$request->name,
-            "email"=>$request->email,
-            "password"=>Hash::make($request->password),
-            "type"=>$request->type,
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "type" => $request->type,
         ];
         User::create($data);
 
@@ -42,7 +42,7 @@ class ApiController extends Controller
             "password" => $request->password
         ]);
 
-        if(!empty($token)){
+        if (!empty($token)) {
 
             return response()->json([
                 "status" => true,
@@ -79,7 +79,7 @@ class ApiController extends Controller
         // invalidate token
         $invalidate = JWTAuth::invalidate($token);
 
-        if($invalidate) {
+        if ($invalidate) {
             return response()->json([
                 'meta' => [
                     'code' => 200,

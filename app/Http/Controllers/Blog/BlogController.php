@@ -15,25 +15,16 @@ class BlogController extends Controller
 {
     public function display()
     {
-        //only authenticate user can see their blog
-        if (!auth()->check()) {
-            return response()->json([
-                "status" => false,
-                "message" => "Please login first",
-            ], 401);
-        }
-        $id = auth()->user()->id;
-        $blogs = Blog::where("user_id", $id)
-            ->where("isdeleted", false)
+        $blogs = Blog::where("isdeleted", false)
             ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
-            ->paginate(20);
+            ->paginate(10);
 
         $returnData = [];
 
         foreach ($blogs as $blog) {
             $returnData[] = [
                 "id" => $blog->id,
-                "slug"=> $blog->slug,
+                "slug" => $blog->slug,
                 "title" => $blog->title,
                 "description" => $blog->description,
                 "photo" => $blog->photo,
@@ -51,10 +42,16 @@ class BlogController extends Controller
 
             ];
         }
+        $pagination = [
+            "next_page_url" => $blogs->nextPageUrl(),
+            "previous_page_url" => $blogs->previousPageUrl(),
+            "total" => $blogs->total(),
+        ];
         return response()->json([
             "status" => true,
             "message" => "Blog fetched successfully",
-            "data" => $returnData
+            "data" => $returnData,
+            "pagination" => $pagination
         ], 200);
 
     }
@@ -177,6 +174,57 @@ class BlogController extends Controller
             ]);
     }
 
+    public function displayuserBlog()
+    {
+        //only authenticate user can see their blog
+        if (!auth()->check()) {
+            return response()->json([
+                "status" => false,
+                "message" => "Please login first",
+            ], 401);
+        }
+        $id = auth()->user()->id;
+        $blogs = Blog::where("user_id", $id)
+            ->where("isdeleted", false)
+            ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
+            ->paginate(20);
+
+        $returnData = [];
+
+        foreach ($blogs as $blog) {
+            $returnData[] = [
+                "id" => $blog->id,
+                "slug" => $blog->slug,
+                "title" => $blog->title,
+                "description" => $blog->description,
+                "photo" => $blog->photo,
+                "category" => $blog->parentCategory->name ?? "",
+                "sub_category" => $blog->childCategory->name ?? "",
+                "tag" => $blog->tag ?? "",
+                "created_at" => $blog->created_at,
+                "created_by" => $blog->users->name,
+                "is_deleted" => $blog->isdeleted,
+                "seo" => [
+                    "meta.name" => $blog->title,
+                    "meta.desc" => $blog->description,
+                    "meta.robots" => "noindex, nofollow"
+                ]
+            ];
+        }
+        $pagination = [
+            "next_page_url" => $blogs->nextPageUrl(),
+            "previous_page_url" => $blogs->previousPageUrl(),
+            "total" => $blogs->total(),
+        ];
+        return response()->json([
+            "status" => true,
+            "message" => "Blog fetched successfully",
+            "data" => $returnData,
+            "pagination" => $pagination
+        ], 200);
+
+    }
+
     protected function uploadImage($file)
     {
         $uploadFolder = 'blog-image';
@@ -187,9 +235,10 @@ class BlogController extends Controller
         return $uploadedImageUrl;
     }
 
-    public function displaySpecificBlog(string $id)
+    public function displaySpecificBlog(string $slug)
     {
-        $blog = Blog::with(["users:id,name,email,type", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])->find($id);
+        $blog = Blog::where("slug", $slug)
+            ->with(["users:id,name,email,type", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])->first();
 
         if (!$blog) {
             return response()->json([
