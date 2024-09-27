@@ -220,7 +220,7 @@ class BlogController extends Controller
             "status" => true,
             "message" => "Blog fetched successfully",
             "data" => $returnData,
-            "pagination"=>$pagination
+            "pagination" => $pagination
         ], 200);
 
     }
@@ -235,9 +235,10 @@ class BlogController extends Controller
         return $uploadedImageUrl;
     }
 
-    public function displaySpecificBlog(string $id)
+    public function displaySpecificBlog(string $slug)
     {
-        $blog = Blog::with(["users:id,name,email,type", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])->find($id);
+        $blog = Blog::where("slug", $slug)
+            ->with(["users:id,name,email,type", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])->first();
 
         if (!$blog) {
             return response()->json([

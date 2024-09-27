@@ -31,7 +31,6 @@ Route::group(["prefix" => "user"], function () {
 
 Route::group(["prefix" => "blog"], function () {
     Route::get("/user", [BlogController::class, "displayuserBlog"]);
-    Route::get("/{id}", [BlogController::class, "displaySpecificBlog"]);
     Route::post("create", [BlogController::class, "store"]);
     Route::put("update", [BlogController::class, "update"]);
     Route::delete("delete/{id}", [BlogController::class, "destroy"]);
@@ -84,5 +83,7 @@ Route::group(["prefix" => "rating"], function () {
     });
 });
 
-
-Route::get("/blog", [BlogController::class, "display"]);
+Route::group(["prefix" => "blog"], function () {
+    Route::get("/", [BlogController::class, "display"]);
+    Route::get("/{slug}", [BlogController::class, "displaySpecificBlog"]);
+});
