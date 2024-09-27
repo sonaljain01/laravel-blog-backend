@@ -42,9 +42,6 @@ class BlogController extends Controller
                 "created_at" => $blog->created_at,
                 "created_by" => $blog->users->name,
                 "is_deleted" => $blog->isdeleted,
-                "next_page_url" => $blogs->nextPageUrl(),
-                "previous_page_url" => $blogs->previousPageUrl(),
-                "total" => $blogs->total(),
                 "seo" => [
                     "meta.name" => $blog->title,
                     "meta.desc" => $blog->description,
@@ -53,10 +50,16 @@ class BlogController extends Controller
 
             ];
         }
+        $pagination = [
+            "next_page_url" => $blogs->nextPageUrl(),
+            "previous_page_url" => $blogs->previousPageUrl(),
+            "total" => $blogs->total(),
+        ];
         return response()->json([
             "status" => true,
             "message" => "Blog fetched successfully",
-            "data" => $returnData
+            "data" => $returnData,
+            "pagination" => $pagination
         ], 200);
 
     }
