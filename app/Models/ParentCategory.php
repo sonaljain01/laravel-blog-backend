@@ -11,6 +11,7 @@ class ParentCategory extends Model
 
     protected $fillable = [
         'name',
+        'image',
         "created_by"
     ];
 }
