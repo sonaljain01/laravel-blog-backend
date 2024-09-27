@@ -91,11 +91,18 @@ class BlogController extends Controller
 
         $blog = Blog::create($filldata);
         // Http::post("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzNTA0MzI1MjZlNTUzMDUxMzQi_pc", $sendData);
+
+        if ($request->type === "draft") {
+            return response()->json([
+                "status" => true,
+                "message" => "Draft created successfully",
+            ], 200);
+        }
         return response()->json([
             "status" => true,
             "message" => "Blog created successfully",
             "data" => $blog
-        ]);
+        ], 200);
     }
 
     public function update(BlogUpdateRequest $request)
@@ -263,10 +270,10 @@ class BlogController extends Controller
             "message" => "Blog fetched successfully",
             "data" => $blog,
             "seo" => [
-                    "title" => $blog->title,
-                    "description" => $blog->description,
-                    "meta.robots" => "noindex, nofollow"
-                ]
+                "title" => $blog->title,
+                "description" => $blog->description,
+                "meta.robots" => "noindex, nofollow"
+            ]
         ]);
     }
     protected function slug($title)
