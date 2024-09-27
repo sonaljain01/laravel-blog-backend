@@ -32,6 +32,8 @@ class BlogStoreRequest extends FormRequest
             "tag" => "required|string|exists:tags,id",
             "sub_category" => "required|string|exists:child_categories,id",
             "slug" => "nullable|unique:blogs,slug|string|max:255",
+            "draft" => "sometimes|boolean",
+            "publish" => "sometimes|boolean",
         ];
     }
 

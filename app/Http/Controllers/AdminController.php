@@ -9,8 +9,10 @@ class AdminController extends Controller
     public function display()
     {
         //admin can see blog of every user
-        $blogs = Blog::all()
-            ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
+        $blogs = Blog::with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
+            ->where("isdeleted", false)
+            ->where('draft', false)
+            ->where('publish', true)
             ->paginate(20);
         $returnData = [];
 
@@ -61,14 +63,10 @@ class AdminController extends Controller
             ]);
         }
 
-        $isUpdate = $isBlogExist->update([
-            "isDeleted" => true,
-            "deleted_by" => auth()->user()->id
-        ]);
+        $deletedBy = $isBlogExist->deletedBy->name ?? "Admin";
+        $isDeleted = $isBlogExist->delete();
 
-        $deletedBy = $isBlogExist->deletedBy->name;
-
-        if ($isUpdate)
+        if ($isDeleted)
             return response()->json([
                 "status" => true,
                 "message" => "Blog deleted successfully",

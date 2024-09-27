@@ -14,6 +14,8 @@ class BlogController extends Controller
     public function display()
     {
         $blogs = Blog::where("isdeleted", false)
+            ->where("draft", false)
+            ->where("publish", true)
             ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
             ->paginate(10);
 
@@ -78,7 +80,9 @@ class BlogController extends Controller
             "parent_category" => $request->category,
             "tag" => $request->tag,
             "child_category" => $request->sub_category,
-            "slug" => $slug
+            "slug" => $slug,
+            "draft" => $request->input('draft', false),
+            'publish'=> $request->input('publish', false),
         ];
 
         $sendData = [
@@ -101,7 +105,9 @@ class BlogController extends Controller
         $blog_id = $request->blog_id;
         $filldata = [
             "title" => $request->title,
-            "description" => $request->description
+            "description" => $request->description,
+            "draft" => $request->input('draft', false),
+            "publish" => $request->input('publish', false),
         ];
         $sendData = [
             "subject" => "Blog with id." . $blog_id . " updated",
@@ -244,6 +250,17 @@ class BlogController extends Controller
                 "message" => "Blog not found",
             ]);
         }
+
+        if($blog->draft)
+        {
+            if(!auth()->check() || auth()->user()->id !== $blog->user_id) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Unauthorized to view this blog",
+                ]);
+            }
+        }
+
         return response()->json([
             "status" => true,
             "message" => "Blog fetched successfully",

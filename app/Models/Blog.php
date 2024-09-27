@@ -19,7 +19,9 @@ class Blog extends Model
         "parent_category",
         "tag",
         "child_category",
-        "slug"
+        "slug",
+        "publish",
+        "draft",
     ];
 
     public function users()
