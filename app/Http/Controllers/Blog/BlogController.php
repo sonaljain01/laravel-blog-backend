@@ -14,8 +14,7 @@ class BlogController extends Controller
     public function display()
     {
         $blogs = Blog::where("isdeleted", false)
-            ->where("draft", false)
-            ->where("publish", true)
+            ->where("type", "publish")
             ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
             ->paginate(10);
 
