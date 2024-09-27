@@ -6,6 +6,7 @@ use App\Http\Requests\ParentCatrgoryRequest;
 use App\Http\Requests\ParentCatrgoryUpdateRequest;
 use App\Models\ParentCategory;
 use App\Models\ChildCategory;
+use Storage;
 
 class CatrgoryController extends Controller
 {
@@ -13,6 +14,7 @@ class CatrgoryController extends Controller
     {
         $data = [
             "name" => $request->name,
+            "image" => $request->hasFile("image") ? $this->uploadImage($request->file("image")) : null,
             "created_by" => auth()->user()->id
         ];
         $isSave = ParentCategory::create($data);
@@ -82,5 +84,15 @@ class CatrgoryController extends Controller
             "message" => "Category fetched successfully",
             "category" => $category
         ]);
+    }
+
+    protected function uploadImage($file)
+    {
+        $uploadFolder = 'category-image';
+        $image = $file;
+        $image_uploaded_path = $image->store($uploadFolder, 'public');
+        $uploadedImageUrl = Storage::disk('public')->url($image_uploaded_path);
+
+        return $uploadedImageUrl;
     }
 }
