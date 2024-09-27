@@ -81,8 +81,7 @@ class BlogController extends Controller
             "tag" => $request->tag,
             "child_category" => $request->sub_category,
             "slug" => $slug,
-            "draft" => $request->input('draft', false),
-            'publish'=> $request->input('publish', false),
+            "type" => $request->type
         ];
 
         $sendData = [
@@ -251,9 +250,8 @@ class BlogController extends Controller
             ]);
         }
 
-        if($blog->draft)
-        {
-            if(!auth()->check() || auth()->user()->id !== $blog->user_id) {
+        if ($blog->draft) {
+            if (!auth()->check() || auth()->user()->id !== $blog->user_id) {
                 return response()->json([
                     "status" => false,
                     "message" => "Unauthorized to view this blog",
@@ -266,10 +264,10 @@ class BlogController extends Controller
             "message" => "Blog fetched successfully",
             "data" => $blog,
             "seo" => [
-                "title" => $blog->title,
-                "description" => $blog->description,
-                "meta.robots" => "noindex, nofollow"
-            ]
+                    "title" => $blog->title,
+                    "description" => $blog->description,
+                    "meta.robots" => "noindex, nofollow"
+                ]
         ]);
     }
     protected function slug($title)
