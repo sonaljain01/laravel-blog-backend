@@ -24,38 +24,49 @@ Route::group(["prefix" => "auth"], function () {
 });
 
 Route::group(["prefix" => "user"], function () {
-    Route::get("profile", [AuthController::class, "profile"]);
-    Route::get("logout", [AuthController::class, "logout"]);
-})->middleware("auth:api");
+    Route::group(["middleware" => "auth:api"], function () {
+        Route::get("profile", [AuthController::class, "profile"]);
+        Route::get("logout", [AuthController::class, "logout"]);
+    });
+});
 
 
 Route::group(["prefix" => "blog"], function () {
-    Route::get("/user", [BlogController::class, "displayuserBlog"]);
-    Route::post("create", [BlogController::class, "store"]);
-    Route::put("update", [BlogController::class, "update"]);
-    Route::delete("delete/{id}", [BlogController::class, "destroy"]);
-})->middleware("auth:api");
+    Route::group(["middleware" => "auth:api"], function () {
+        Route::get("/user", [BlogController::class, "displayuserBlog"]);
+        Route::post("create", [BlogController::class, "store"]);
+        Route::put("update", [BlogController::class, "update"]);
+        Route::delete("delete/{id}", [BlogController::class, "destroy"]);
+    });
+    Route::get("/", [BlogController::class, "display"]);
+    Route::get("/{slug}", [BlogController::class, "displaySpecificBlog"]);
+});
 
 Route::group(["prefix" => "admin/blog"], function () {
-    Route::get("/", [AdminController::class, "display"]);
-    Route::post("create", [AdminController::class, "store"]);
-    Route::put("update", [AdminController::class, "update"]);
-    Route::delete("delete/{id}", [AdminController::class, "destroy"]);
-})->middleware("auth:api");
+    Route::group(["middleware" => "auth:api"], function () {
+        Route::get("/", [AdminController::class, "display"]);
+        Route::post("create", [AdminController::class, "store"]);
+        Route::put("update", [AdminController::class, "update"]);
+        Route::delete("delete/{id}", [AdminController::class, "destroy"]);
+    });
+
+});
 
 Route::group(["prefix" => "category"], function () {
+    Route::group(["middleware" => "auth:api"], function () { });
     Route::get("/", [CatrgoryController::class, "display"]);
     Route::post("create", [CatrgoryController::class, "store"]);
     Route::put("update/{id}", [CatrgoryController::class, "update"]);
     Route::delete("delete/{id}", [CatrgoryController::class, "destroy"]);
-})->middleware("auth:api");
+});
 
 Route::group(["prefix" => "category/child"], function () {
+    Route::group(["middleware" => "auth:api"], function () { });
     Route::get("/", [ChildCatrgoryController::class, "display"]);
     Route::post("create", [ChildCatrgoryController::class, "store"]);
     Route::put("update/{id}", [ChildCatrgoryController::class, "update"]);
     Route::delete("delete/{id}", [ChildCatrgoryController::class, "destroy"]);
-})->middleware("auth:api");
+});
 
 Route::group(["prefix" => "tag"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -68,22 +79,17 @@ Route::group(["prefix" => "tag"], function () {
 
 Route::group(["prefix" => "comment"], function () {
     Route::group(["middleware" => "auth:api"], function () {
-        Route::get("/{id}", [CommentController::class, "display"]);
         Route::post("create", [CommentController::class, "store"]);
         Route::post("update/{id}", [CommentController::class, "update"]);
         Route::post("delete/{id}", [CommentController::class, "destroy"]);
     });
+    Route::get("/{id}", [CommentController::class, "display"]);
 });
 
 Route::group(["prefix" => "rating"], function () {
     Route::group(["middleware" => "auth:api"], function () {
-        Route::get("/{id}", [RatingController::class, "display"]);
-        Route::get("avg/{id}", [RatingController::class, "displayavgRating"]);
         Route::post("create", [RatingController::class, "store"]);
     });
-});
-
-Route::group(["prefix" => "blog"], function () {
-    Route::get("/", [BlogController::class, "display"]);
-    Route::get("/{slug}", [BlogController::class, "displaySpecificBlog"]);
+    Route::get("/{id}", [RatingController::class, "display"]);
+    Route::get("avg/{id}", [RatingController::class, "displayavgRating"]);
 });
