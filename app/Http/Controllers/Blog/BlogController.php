@@ -213,6 +213,7 @@ class BlogController extends Controller
                 "created_at" => $blog->created_at,
                 "created_by" => $blog->users->name,
                 "is_deleted" => $blog->isdeleted,
+                "type"=>$blog->type,
                 "seo" => [
                     "meta.name" => $blog->title,
                     "meta.desc" => $blog->description,
