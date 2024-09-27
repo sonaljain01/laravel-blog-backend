@@ -52,18 +52,4 @@ class UpdateProfileController extends Controller
         return $uploadedImageUrl;
     }
 
-    // public function getProfile()
-    // {
-    //     $user = Auth::user();
-
-    //     $user->profile_image_url = $user->profile_image ? asset("storage/" . $user->profile_image) : null;
-    //     return response()->json([
-    //         "status" => true,
-    //         "message" => "Profile data",
-    //         "data" => [
-    //             'name' => $user->name,
-    //             'profile_image' => $user->profile_image_url,
-    //         ],
-    //     ]);
-    // }
 }
