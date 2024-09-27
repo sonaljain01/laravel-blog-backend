@@ -11,8 +11,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if(auth()->check())
-        {
+        if (auth()->check()) {
             return true;
         }
         return false;
@@ -26,8 +25,9 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:255",
+            "name" => "nullable|string|max:255",
             "profile_image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
+            "email" => "nullable|email|max:255|unique:users,email",
         ];
     }
 
@@ -37,7 +37,7 @@ class UpdateProfileRequest extends FormRequest
             'name.required' => 'Name is required',
             'name.string' => 'Name must be a string',
             'name.max' => 'Name is too long',
-            'profile_image.mimes'=> 'image must be in form of jpeg,png,jpg,gif',
+            'profile_image.mimes' => 'image must be in form of jpeg,png,jpg,gif',
             'profile_image.max' => 'image is too large',
             'profile_image.image' => 'image must be an image',
         ];

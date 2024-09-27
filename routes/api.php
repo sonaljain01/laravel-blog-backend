@@ -27,6 +27,7 @@ Route::group(["prefix" => "auth"], function () {
 Route::group(["prefix" => "user"], function () {
     Route::group(["middleware" => "auth:api"], function () {
         Route::get("profile", [AuthController::class, "profile"]);
+        Route::put("profile/update/{id}", [UpdateProfileController::class, "updateProfile"]);
         Route::get("logout", [AuthController::class, "logout"]);
     });
 });
@@ -93,12 +94,4 @@ Route::group(["prefix" => "rating"], function () {
     });
     Route::get("/{id}", [RatingController::class, "display"]);
     Route::get("avg/{id}", [RatingController::class, "displayavgRating"]);
-});
-
-
-Route::group(["prefix" => "user"], function () {
-    Route::group(["middleware" => "auth:api"], function () {
-        // Route::get("profile", [UpdateProfileController::class, "getProfile"]);
-        Route::post("update/profile", [UpdateProfileController::class, "updateProfile"]);
-    });
 });

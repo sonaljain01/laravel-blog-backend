@@ -112,7 +112,6 @@ class BlogController extends Controller
             $this->error = "You are not allowed to update other person blog";
             return false;
         }
-        // dd($request->only(['title', 'description', 'category', 'tag', 'sub_category', 'type']));
 
         $filldata = $request->only(['title', 'description', 'parent_category', 'tag', 'child_category', 'type']);
 
