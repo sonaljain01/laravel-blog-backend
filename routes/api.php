@@ -8,6 +8,7 @@ use App\Http\Controllers\CatrgoryController;
 use App\Http\Controllers\ChildCatrgoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\UpdateProfileController;
 
 Route::get("/", function () {
     return response()->json([
@@ -92,4 +93,12 @@ Route::group(["prefix" => "rating"], function () {
     });
     Route::get("/{id}", [RatingController::class, "display"]);
     Route::get("avg/{id}", [RatingController::class, "displayavgRating"]);
+});
+
+
+Route::group(["prefix" => "user"], function () {
+    Route::group(["middleware" => "auth:api"], function () {
+        // Route::get("profile", [UpdateProfileController::class, "getProfile"]);
+        Route::post("update/profile", [UpdateProfileController::class, "updateProfile"]);
+    });
 });
