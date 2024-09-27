@@ -27,7 +27,7 @@ Route::group(["prefix" => "auth"], function () {
 Route::group(["prefix" => "user"], function () {
     Route::group(["middleware" => "auth:api"], function () {
         Route::get("profile", [AuthController::class, "profile"]);
-        Route::put("profile/update/{id}", [UpdateProfileController::class, "updateProfile"]);
+        Route::put("profile/update", [UpdateProfileController::class, "updateProfile"]);
         Route::get("logout", [AuthController::class, "logout"]);
     });
 });

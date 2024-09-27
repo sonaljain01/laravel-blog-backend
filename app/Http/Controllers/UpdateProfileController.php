@@ -8,16 +8,10 @@ use App\Models\User;
 
 class UpdateProfileController extends Controller
 {
-    public function updateProfile(UpdateProfileRequest $request, string $id)
+    public function updateProfile(UpdateProfileRequest $request)
     {
-        $user = User::find($id);
+        $user = User::find(auth()->user()->id);
 
-        if (auth()->user()->id != $id) {
-            return response()->json([
-                "status" => false,
-                "message" => "Unauthorized",
-            ], 401);
-        }
         $data = $request->only([
             "name",
             "email",

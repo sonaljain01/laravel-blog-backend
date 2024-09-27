@@ -62,7 +62,6 @@ class AuthController extends Controller
     {
         $userdata = auth()->user();
 
-        // $userdata->profile_img_url = $userdata->profile_image ? asset("storage/" . $userdata->profile_image) : null;
         return response()->json([
             "status" => true,
             "message" => "Profile data",

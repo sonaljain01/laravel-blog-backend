@@ -27,7 +27,7 @@ class UpdateProfileRequest extends FormRequest
         return [
             "name" => "nullable|string|max:255",
             "profile_image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
-            "email" => "nullable|email|max:255|unique:users,email",
+            "email" => "nullable|email|max:255|unique:users,email," . auth()->user()->id,
         ];
     }
 
