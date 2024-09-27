@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
 use Auth;
-use Illuminate\Http\Request;
 use Storage;
 
 class UpdateProfileController extends Controller
@@ -16,7 +15,7 @@ class UpdateProfileController extends Controller
             "name" => $request->name,
             "profile_image" => $request->hasFile('profile_image') ? $this->uploadProfileImage($request->file('profile_image')) : $user->profile_image
         ];
-        
+
         $isUpdate = $user->update(attributes: $data);
         if ($isUpdate) {
             return response()->json([
