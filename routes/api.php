@@ -36,7 +36,7 @@ Route::group(["prefix" => "blog"], function () {
     Route::group(["middleware" => "auth:api"], function () {
         Route::get("/user", [BlogController::class, "displayuserBlog"]);
         Route::post("create", [BlogController::class, "store"]);
-        Route::put("update", [BlogController::class, "update"]);
+        Route::put("update/{slug}", [BlogController::class, "update"]);
         Route::delete("delete/{id}", [BlogController::class, "destroy"]);
     });
     Route::get("/", [BlogController::class, "display"]);
