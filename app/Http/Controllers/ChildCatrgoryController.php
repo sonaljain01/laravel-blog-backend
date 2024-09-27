@@ -64,9 +64,9 @@ class ChildCatrgoryController extends Controller
         ], 500);
     }
 
-    public function display()
+    public function display(string $id)
     {
-        $category = ChildCategory::all();
+        $category = ChildCategory::where("category_id", $id)->get();
         if ($category->count() == 0) {
             return response()->json([
                 "status" => false,
@@ -76,7 +76,7 @@ class ChildCatrgoryController extends Controller
         return response()->json([
             "status" => true,
             "message" => "Child category fetched successfully",
-            "category" => $category
+            "data" => $category
         ]);
     }
 }

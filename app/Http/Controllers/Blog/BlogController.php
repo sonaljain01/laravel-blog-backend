@@ -14,8 +14,7 @@ class BlogController extends Controller
     public function display()
     {
         $blogs = Blog::where("isdeleted", false)
-            ->where("draft", false)
-            ->where("publish", true)
+            ->where("type", "publish")
             ->with(["users:id,name", "deletedBy:id,name", "parentCategory:id,name", "childCategory:id,name"])
             ->paginate(10);
 
@@ -81,8 +80,7 @@ class BlogController extends Controller
             "tag" => $request->tag,
             "child_category" => $request->sub_category,
             "slug" => $slug,
-            "draft" => $request->input('draft', false),
-            'publish'=> $request->input('publish', false),
+            "type" => $request->type
         ];
 
         $sendData = [
@@ -93,11 +91,18 @@ class BlogController extends Controller
 
         $blog = Blog::create($filldata);
         // Http::post("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzNTA0MzI1MjZlNTUzMDUxMzQi_pc", $sendData);
+
+        if ($request->type === "draft") {
+            return response()->json([
+                "status" => true,
+                "message" => "Draft created successfully",
+            ], 200);
+        }
         return response()->json([
             "status" => true,
             "message" => "Blog created successfully",
             "data" => $blog
-        ]);
+        ], 200);
     }
 
     public function update(BlogUpdateRequest $request)
@@ -251,9 +256,8 @@ class BlogController extends Controller
             ]);
         }
 
-        if($blog->draft)
-        {
-            if(!auth()->check() || auth()->user()->id !== $blog->user_id) {
+        if ($blog->draft) {
+            if (!auth()->check() || auth()->user()->id !== $blog->user_id) {
                 return response()->json([
                     "status" => false,
                     "message" => "Unauthorized to view this blog",

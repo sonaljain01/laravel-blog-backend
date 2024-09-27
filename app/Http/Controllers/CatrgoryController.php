@@ -82,7 +82,7 @@ class CatrgoryController extends Controller
         return response()->json([
             "status" => true,
             "message" => "Category fetched successfully",
-            "category" => $category
+            "data" => $category
         ]);
     }
 
