@@ -37,6 +37,7 @@ class ParentCatrgoryRequest extends FormRequest
     {
         return [
             "name" => "required|string|max:255",
+            "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
         ];
     }
 
@@ -46,6 +47,9 @@ class ParentCatrgoryRequest extends FormRequest
             'name.required' => 'Name is required',
             'name.string' => 'Name must be a string',
             'name.max' => 'Name is too long',
+            'image.mimes'=> 'image must be in form of jpeg,png,jpg,gif',
+            'image.max' => 'image is too large',
+            'image.image' => 'image must be an image',
         ];
     }
 }
