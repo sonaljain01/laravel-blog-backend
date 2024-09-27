@@ -62,7 +62,7 @@ Route::group(["prefix" => "category"], function () {
 
 Route::group(["prefix" => "category/child"], function () {
     Route::group(["middleware" => "auth:api"], function () { });
-    Route::get("/", [ChildCatrgoryController::class, "display"]);
+    Route::get("/{id}", [ChildCatrgoryController::class, "display"]);
     Route::post("create", [ChildCatrgoryController::class, "store"]);
     Route::put("update/{id}", [ChildCatrgoryController::class, "update"]);
     Route::delete("delete/{id}", [ChildCatrgoryController::class, "destroy"]);
