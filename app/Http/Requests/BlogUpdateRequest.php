@@ -15,19 +15,9 @@ class BlogUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         if (!auth()->check()) {
+            $this->error = "Please login first";
             return false;
         }
-        $user_id = auth()->user()->id;
-        // only authorized user can update notes 
-        if(! $this->blog_id){
-            $this->error = "please enter blog id";
-            return false;
-        }
-        if(!Blog::where('id', $this->blog_id)->where('user_id', $user_id)->exists()){
-            $this->error = "You are not allowed to update other person blog";
-            return false;
-        }
-
         return true;
     }
 
@@ -44,21 +34,33 @@ class BlogUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|max:255',
-            'description' => 'string',
-            'blog_id' => 'required|integer|exists:blogs,id',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
+            "parent_category" => "nullable|string|exists:parent_categories,id",
+            "tag" => "nullable|string|exists:tags,id",
+            "child_category" => "nullable|string|exists:child_categories,id",
+            "slug" => "nullable|unique:blogs,slug|string|max:255",
+            "type" => "nullable|string"
         ];
     }
 
     public function message(): array
     {
         return [
-            'title.string' => 'Title must be a string',
+
             'title.max' => 'Title is too long',
+            'title.string' => 'Title must be a string',
             'description.string' => 'Description must be a string',
-            'blog_id.required' => 'Blog id is required',
-            'blog_id.integer' => 'Blog id must be an integer',
-            'blog_id.exists' => 'Blog id does not exist',
+            'image.image' => 'Image must be an image',
+            'image.mimes' => 'Image must be a jpeg,png,jpg,gif',
+            'image.max' => 'Image is too large',
+            'category.string' => 'Category must be a string',
+            'tag.string' => 'Tag must be a string',
+            'sub_category.string' => 'Sub category must be a string',
+            'slug.string' => 'Slug must be a string',
+            'slug.max' => 'Slug is too long',
+            'type.string' => 'Type must be a string',
         ];
     }
 }
