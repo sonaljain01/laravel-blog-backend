@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Blog\BlogController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CatrgoryController;
@@ -19,13 +19,13 @@ Route::get("/", function () {
 
 
 Route::group(["prefix" => "auth"], function () {
-    Route::post("register", [ApiController::class, "register"]);
-    Route::post("login", [ApiController::class, "login"]);
+    Route::post("register", [AuthController::class, "register"]);
+    Route::post("login", [AuthController::class, "login"]);
 });
 
 Route::group(["prefix" => "user"], function () {
-    Route::get("profile", [ApiController::class, "profile"]);
-    Route::get("logout", [ApiController::class, "logout"]);
+    Route::get("profile", [AuthController::class, "profile"]);
+    Route::get("logout", [AuthController::class, "logout"]);
 })->middleware("auth:api");
 
 
