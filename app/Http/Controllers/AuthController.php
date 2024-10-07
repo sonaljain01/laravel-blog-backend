@@ -30,7 +30,7 @@ class AuthController extends Controller
             $this->sendEmail($register);
             return response()->json([
                 "status" => true,
-                "message" => "User registered successfully",
+                "message" => "User registered successfully, Please verify Your Email",
                 'data' => $register
             ]);
         }
