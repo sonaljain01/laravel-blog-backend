@@ -8,6 +8,7 @@ use App\Http\Controllers\CatrgoryController;
 use App\Http\Controllers\ChildCatrgoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\UpdateProfileController;
 
 Route::get("/", function () {
     return response()->json([
@@ -28,6 +29,7 @@ Route::group(["prefix" => "auth"], function () {
 Route::group(["prefix" => "user"], function () {
     Route::group(["middleware" => "auth:api"], function () {
         Route::get("profile", [AuthController::class, "profile"]);
+        Route::put("profile/update", [UpdateProfileController::class, "updateProfile"]);
         Route::get("logout", [AuthController::class, "logout"]);
     });
 });
@@ -37,7 +39,7 @@ Route::group(["prefix" => "blog"], function () {
     Route::group(["middleware" => "auth:api"], function () {
         Route::get("/user", [BlogController::class, "displayuserBlog"]);
         Route::post("create", [BlogController::class, "store"]);
-        Route::put("update", [BlogController::class, "update"]);
+        Route::put("update/{slug}", [BlogController::class, "update"]);
         Route::delete("delete/{id}", [BlogController::class, "destroy"]);
     });
     Route::get("/", [BlogController::class, "display"]);
@@ -64,7 +66,7 @@ Route::group(["prefix" => "category"], function () {
 
 Route::group(["prefix" => "category/child"], function () {
     Route::group(["middleware" => "auth:api"], function () { });
-    Route::get("/", [ChildCatrgoryController::class, "display"]);
+    Route::get("/{id}", [ChildCatrgoryController::class, "display"]);
     Route::post("create", [ChildCatrgoryController::class, "store"]);
     Route::put("update/{id}", [ChildCatrgoryController::class, "update"]);
     Route::delete("delete/{id}", [ChildCatrgoryController::class, "destroy"]);

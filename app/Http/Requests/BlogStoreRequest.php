@@ -27,11 +27,12 @@ class BlogStoreRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required',
             "category" => "required|string|exists:parent_categories,id",
             "tag" => "required|string|exists:tags,id",
             "sub_category" => "required|string|exists:child_categories,id",
             "slug" => "nullable|unique:blogs,slug|string|max:255",
+            "type" => "required|string"
         ];
     }
 
@@ -43,6 +44,19 @@ class BlogStoreRequest extends FormRequest
             'title.string' => 'Title must be a string',
             'description.required' => 'Description is required',
             'description.string' => 'Description must be a string',
+            'image.image' => 'Image must be an image',
+            'image.mimes' => 'Image must be a jpeg,png,jpg,gif',
+            'image.max' => 'Image is too large',
+            'category.required' => 'Category is required',
+            'category.string' => 'Category must be a string',
+            'tag.required' => 'Tag is required',
+            'tag.string' => 'Tag must be a string',
+            'sub_category.required' => 'Sub category is required',
+            'sub_category.string' => 'Sub category must be a string',
+            'slug.string' => 'Slug must be a string',
+            'slug.max' => 'Slug is too long',
+            'type.required' => 'Type is required',
+            'type.string' => 'Type must be a string',
         ];
     }
 }

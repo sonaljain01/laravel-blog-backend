@@ -4,22 +4,17 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ParentCatrgoryUpdateRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
-            return false;
+        if (auth()->check()) {
+            return true;
         }
-        if (!auth()->user()->type === "admin") {
-            $this->err = "You need to be admin to create category";
-            return false;
-        }
-        return true;
-       
+        return false;
     }
 
     /**
@@ -30,8 +25,9 @@ class ParentCatrgoryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:255",
-            "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
+            "name" => "nullable|string|max:255",
+            "profile_image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
+            "email" => "nullable|email|max:255|unique:users,email," . auth()->user()->id,
         ];
     }
 
@@ -41,9 +37,9 @@ class ParentCatrgoryUpdateRequest extends FormRequest
             'name.required' => 'Name is required',
             'name.string' => 'Name must be a string',
             'name.max' => 'Name is too long',
-            'image.mimes'=> 'image must be in form of jpeg,png,jpg,gif',
-            'image.max' => 'image is too large',
-            'image.image' => 'image must be an image',
+            'profile_image.mimes' => 'image must be in form of jpeg,png,jpg,gif',
+            'profile_image.max' => 'image is too large',
+            'profile_image.image' => 'image must be an image',
         ];
     }
 }
