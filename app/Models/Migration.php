@@ -11,8 +11,8 @@ class Migration extends Model
 
     protected $fillable = [
         'rating',
-        "blog_id",
-        "user_id",
+        'blog_id',
+        'user_id',
     ];
 
     public function blog()

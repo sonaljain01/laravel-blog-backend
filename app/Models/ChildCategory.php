@@ -12,11 +12,11 @@ class ChildCategory extends Model
     protected $fillable = [
         'name',
         'category_id',
-        "created_by"
+        'created_by',
     ];
 
     public function category()
     {
-        return $this->belongsTo(ParentCategory::class, "category_id");
+        return $this->belongsTo(ParentCategory::class, 'category_id');
     }
 }

@@ -11,9 +11,10 @@ class RatingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
+
         return true;
     }
 
@@ -29,6 +30,7 @@ class RatingRequest extends FormRequest
             'blog_id' => 'required|integer|exists:blogs,id',
         ];
     }
+
     public function messages(): array
     {
         return [

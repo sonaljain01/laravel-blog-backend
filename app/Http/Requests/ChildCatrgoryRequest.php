@@ -11,13 +11,15 @@ class ChildCatrgoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
-        if (!auth()->user()->type === "admin") {
-            $this->err = "You need to be admin to create child category";
+        if (! auth()->user()->type === 'admin') {
+            $this->err = 'You need to be admin to create child category';
+
             return false;
         }
+
         return true;
     }
 
@@ -29,8 +31,8 @@ class ChildCatrgoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"=> "required|string|max:255",
-            "category_id"=> "required|integer|exists:parent_categories,id",
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|integer|exists:parent_categories,id',
         ];
     }
 }

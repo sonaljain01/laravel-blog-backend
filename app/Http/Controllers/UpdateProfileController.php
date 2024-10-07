@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
-use Storage;
 use App\Models\User;
+use Storage;
 
 class UpdateProfileController extends Controller
 {
@@ -14,8 +14,8 @@ class UpdateProfileController extends Controller
         $user = User::find(auth()->user()->id);
 
         $data = $request->only([
-            "name",
-            "email",
+            'name',
+            'email',
         ]);
 
         if ($request->hasFile('profile_image')) {
@@ -23,12 +23,11 @@ class UpdateProfileController extends Controller
             // $data['profile_image'] = $this->uploadImage($request->file('profile_image'));
             $user->clearMediaCollection('profile_images');
             $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_images');
-            $mediaItems = $user->getMedia("*");
+            $mediaItems = $user->getMedia('*');
             $mediaItems[0]->getUrl();
             $data['profile_image'] = $mediaItems[0]->original_url;
-            
-        }
 
+        }
 
         $isUpdate = $user->update(attributes: $data);
         // $isUpdate['profile_image_url'] = $user->getFirstMediaUrl('profile_images');
@@ -37,20 +36,20 @@ class UpdateProfileController extends Controller
 
         $user->makeHidden('media');
 
-
         if ($isUpdate) {
             return response()->json([
-                "status" => true,
-                "message" => "Profile updated successfully",
-                "data" => [
-                    "user" => $user,
-                    
-                ]
+                'status' => true,
+                'message' => 'Profile updated successfully',
+                'data' => [
+                    'user' => $user,
+
+                ],
             ], 200);
         }
+
         return response()->json([
-            "status" => false,
-            "message" => "Unable to update profile",
+            'status' => false,
+            'message' => 'Unable to update profile',
         ], 500);
 
     }
@@ -64,5 +63,4 @@ class UpdateProfileController extends Controller
 
         return $uploadedImageUrl;
     }
-
 }

@@ -4,20 +4,22 @@ namespace App\Http\Requests;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Blog;
 
 class BlogUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    protected $error = "";
+    protected $error = '';
+
     public function authorize(): bool
     {
-        if (!auth()->check()) {
-            $this->error = "Please login first";
+        if (! auth()->check()) {
+            $this->error = 'Please login first';
+
             return false;
         }
+
         return true;
     }
 
@@ -37,11 +39,11 @@ class BlogUpdateRequest extends FormRequest
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|nullable',
-            "parent_category" => "nullable|string|exists:parent_categories,id",
-            "tag" => "nullable|string|exists:tags,id",
-            "child_category" => "nullable|string|exists:child_categories,id",
-            "slug" => "nullable|unique:blogs,slug|string|max:255",
-            "type" => "nullable|string"
+            'parent_category' => 'nullable|string|exists:parent_categories,id',
+            'tag' => 'nullable|string|exists:tags,id',
+            'child_category' => 'nullable|string|exists:child_categories,id',
+            'slug' => 'nullable|unique:blogs,slug|string|max:255',
+            'type' => 'nullable|string',
         ];
     }
 

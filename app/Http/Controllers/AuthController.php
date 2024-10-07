@@ -2,38 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
-use Str;
+use App\Http\Requests\RegisterRequest;
+use App\Models\User;
 use Http;
+use Illuminate\Support\Facades\Hash;
+use Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-
     //Register API (POST, Formdata)
     public function register(RegisterRequest $request)
     {
         $data = [
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($request->password),
-            "type" => $request->type,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => $request->type,
         ];
         $register = User::create($data);
 
         // Response
         if ($register) {
             $this->sendEmail($register);
+
             return response()->json([
-                "status" => true,
-                "message" => "User registered successfully, Please verify Your Email",
-                'data' => $register
+                'status' => true,
+                'message' => 'User registered successfully, Please verify Your Email',
+                'data' => $register,
             ]);
         }
+
         return response()->json([
             'success' => false,
             'message' => 'User not created',
@@ -44,39 +44,39 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $user = User::where('email', $request->email)->first();
-        if (!$user) {
+        if (! $user) {
             return response()->json([
-                "status" => false,
-                "message" => "User not found"
+                'status' => false,
+                'message' => 'User not found',
             ]);
         }
 
         if ($user->email_verified_at == null) {
             return response()->json([
-                "status" => false,
-                "message" => "Email not verified"
+                'status' => false,
+                'message' => 'Email not verified',
             ]);
         }
 
         // JWTAuth
         $token = JWTAuth::attempt([
-            "email" => $request->email,
-            "password" => $request->password
+            'email' => $request->email,
+            'password' => $request->password,
         ]);
 
-        if (!empty($token)) {
+        if (! empty($token)) {
 
             return response()->json([
-                "status" => true,
-                "message" => "User logged in succcessfully",
-                "token" => $token
+                'status' => true,
+                'message' => 'User logged in succcessfully',
+                'token' => $token,
             ]);
         }
 
         // Response
         return response()->json([
-            "status" => false,
-            "message" => "Invalid details"
+            'status' => false,
+            'message' => 'Invalid details',
         ]);
     }
 
@@ -86,9 +86,9 @@ class AuthController extends Controller
         $userdata = auth()->user();
 
         return response()->json([
-            "status" => true,
-            "message" => "Profile data",
-            "data" => $userdata,
+            'status' => true,
+            'message' => 'Profile data',
+            'data' => $userdata,
         ]);
     }
 
@@ -110,14 +110,16 @@ class AuthController extends Controller
             } else {
                 $user->update([
                     'email_verified_at' => now(),
-                    "remember_token" => null
+                    'remember_token' => null,
                 ]);
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Email verified successfully',
                 ], 200);
             }
         }
+
         return response()->json([
             'success' => false,
             'message' => 'User not found',
@@ -126,17 +128,17 @@ class AuthController extends Controller
 
     protected function sendEmail(object $user)
     {
-        $app_url = env("APP_URL");
+        $app_url = env('APP_URL');
         $token = Str::random(20);
         $url = "$app_url/api/verify/email/$user->id/$token";
         $data = [
-            "email" => $user->email,
-            "body" => "<a>$url</a>"
+            'email' => $user->email,
+            'body' => "<a>$url</a>",
         ];
         $user->update([
-            'remember_token' => $token
+            'remember_token' => $token,
         ]);
-        Http::post("https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0M2M1MjZhNTUzMTUxM2Ei_pc", $data);
+        Http::post('https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZkMDYzZTA0M2M1MjZhNTUzMTUxM2Ei_pc', $data);
     }
 
     //Logout API(GET)

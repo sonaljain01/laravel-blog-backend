@@ -32,8 +32,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root'   => public_path('media'),
-            'url'    => env('APP_URL').'/media',
+            'root' => public_path('media'),
+            'url' => env('APP_URL').'/media',
             'serve' => true,
             'throw' => false,
         ],

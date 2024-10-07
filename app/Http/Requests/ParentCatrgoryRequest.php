@@ -8,18 +8,21 @@ use Illuminate\Foundation\Http\FormRequest;
 class ParentCatrgoryRequest extends FormRequest
 {
     protected string $err;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
-        if (!auth()->user()->type === "admin") {
-            $this->err = "You need to be admin to create category";
+        if (! auth()->user()->type === 'admin') {
+            $this->err = 'You need to be admin to create category';
+
             return false;
         }
+
         return true;
     }
 
@@ -36,8 +39,8 @@ class ParentCatrgoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:255",
-            "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
@@ -47,7 +50,7 @@ class ParentCatrgoryRequest extends FormRequest
             'name.required' => 'Name is required',
             'name.string' => 'Name must be a string',
             'name.max' => 'Name is too long',
-            'image.mimes'=> 'image must be in form of jpeg,png,jpg,gif',
+            'image.mimes' => 'image must be in form of jpeg,png,jpg,gif',
             'image.max' => 'image is too large',
             'image.image' => 'image must be an image',
         ];

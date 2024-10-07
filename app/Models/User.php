@@ -7,19 +7,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Tymon\JWTAuth\Contracts\JWTSubject; 
 use Spatie\MediaLibrary\HasMedia;
-class User extends Authenticatable implements JWTSubject, HasMedia
-{
-    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-    public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+class User extends Authenticatable implements HasMedia, JWTSubject
+{
+    use HasApiTokens, HasFactory, InteractsWithMedia, Notifiable;
+
+    public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
     {
         $this->addMediaConversion('profile_images')
-             ->width(100)
-             ->height(100);
+            ->width(100)
+            ->height(100);
     }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,9 +31,9 @@ class User extends Authenticatable implements JWTSubject, HasMedia
         'name',
         'email',
         'password',
-        "type",
+        'type',
         'email_verified_at',
-        "remember_token",
+        'remember_token',
     ];
 
     /**
@@ -42,9 +44,9 @@ class User extends Authenticatable implements JWTSubject, HasMedia
     protected $hidden = [
         'password',
         'remember_token',
-        "email_verified_at",
-        "created_at",
-        "updated_at",
+        'email_verified_at',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -74,6 +76,6 @@ class User extends Authenticatable implements JWTSubject, HasMedia
 
     public function created_by()
     {
-        return $this->belongsTo(User::class, "created_by");
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

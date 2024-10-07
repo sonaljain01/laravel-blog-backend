@@ -11,12 +11,11 @@ class Tags extends Model
 
     protected $fillable = [
         'name',
-        "created_by"
+        'created_by',
     ];
 
     public function created_by()
     {
-        return $this->belongsTo(User::class, "created_by");
+        return $this->belongsTo(User::class, 'created_by');
     }
-
 }

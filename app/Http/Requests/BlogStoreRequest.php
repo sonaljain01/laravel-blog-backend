@@ -14,6 +14,7 @@ class BlogStoreRequest extends FormRequest
         if (auth()->check()) {
             return true;
         }
+
         return false;
     }
 
@@ -28,11 +29,11 @@ class BlogStoreRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required',
-            "category" => "required|string|exists:parent_categories,id",
-            "tag" => "required|string|exists:tags,id",
-            "sub_category" => "required|string|exists:child_categories,id",
-            "slug" => "nullable|unique:blogs,slug|string|max:255",
-            "type" => "required|string"
+            'category' => 'required|string|exists:parent_categories,id',
+            'tag' => 'required|string|exists:tags,id',
+            'sub_category' => 'required|string|exists:child_categories,id',
+            'slug' => 'nullable|unique:blogs,slug|string|max:255',
+            'type' => 'required|string',
         ];
     }
 

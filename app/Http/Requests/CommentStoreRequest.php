@@ -11,9 +11,10 @@ class CommentStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
+
         return true;
     }
 
@@ -29,13 +30,14 @@ class CommentStoreRequest extends FormRequest
             'comment' => 'required|string',
         ];
     }
+
     public function messages(): array
     {
         return [
-            "comment.required" => "Comment is required",
-            "comment.string" => "Comment must be string",
-            "blog_id.required" => "Blog id is required",
-            "blog_id.exists" => "Blog id does not exist",
+            'comment.required' => 'Comment is required',
+            'comment.string' => 'Comment must be string',
+            'blog_id.required' => 'Blog id is required',
+            'blog_id.exists' => 'Blog id does not exist',
         ];
     }
 }
