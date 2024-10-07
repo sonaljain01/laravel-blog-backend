@@ -4,23 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
         'title',
         'description',
-        "deleted_by",
-        "isDeleted",
-        "photo",
-        "parent_category",
-        "tag",
-        "child_category",
-        "slug",
-        "type"
+        'deleted_by',
+        'isDeleted',
+        'photo',
+        'parent_category',
+        'tag',
+        'child_category',
+        'slug',
+        'type',
     ];
 
     public function users()
