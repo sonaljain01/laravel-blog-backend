@@ -7,12 +7,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Tymon\JWTAuth\Contracts\JWTSubject; 
-
-class User extends Authenticatable implements JWTSubject
+use Spatie\MediaLibrary\HasMedia;
+class User extends Authenticatable implements JWTSubject, HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
 
+    public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+        $this->addMediaConversion('profile_images')
+             ->width(100)
+             ->height(100);
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -22,7 +29,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        "type"
+        "type",
+        'email_verified_at',
+        "remember_token",
     ];
 
     /**
