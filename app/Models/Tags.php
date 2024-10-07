@@ -13,4 +13,10 @@ class Tags extends Model
         'name',
         "created_by"
     ];
+
+    public function created_by()
+    {
+        return $this->belongsTo(User::class, "created_by");
+    }
+
 }

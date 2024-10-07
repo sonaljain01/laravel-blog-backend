@@ -17,6 +17,8 @@ Route::get("/", function () {
     ]);
 });
 
+Route::get("verify/email/{userId}/{token}", [AuthController::class, "verifyEmail"]);
+
 
 Route::group(["prefix" => "auth"], function () {
     Route::post("register", [AuthController::class, "register"]);
