@@ -94,12 +94,12 @@ class AuthController extends Controller
 
     public function verifyEmail(string $userId, string $token)
     {
-        \Log::info('Verifying email for user ID: ' . $userId . ' with token: ' . $token);
+        // \Log::info('Verifying email for user ID: ' . $userId . ' with token: ' . $token);
 
         $user = User::where('id', $userId)->first();
 
         if (!$user) {
-            \Log::info('User not found for ID: ' . $userId);
+            // \Log::info('User not found for ID: ' . $userId);
             return response()->json([
                 'success' => false,
                 'message' => 'User not found',
@@ -108,7 +108,7 @@ class AuthController extends Controller
 
         
         if ($user->remember_token != $token) {
-            \Log::info('Invalid token for user ID: ' . $userId . ' with token: ' . $token);
+            // \Log::info('Invalid token for user ID: ' . $userId . ' with token: ' . $token);
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid token',
