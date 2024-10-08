@@ -14,6 +14,7 @@ class SeoMetaRequest extends FormRequest
         if (auth()->check()) {
             return true;
         }
+
         return false;
     }
 

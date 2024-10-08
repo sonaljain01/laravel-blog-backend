@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('seo_metas', function (Blueprint $table) {
             $table->increments('id');
 
-       
             //defining the index
             $table->foreignId('blog_id')->references('id')->on('blogs')->onDelete('cascade');
             $table->index('blog_id');
