@@ -48,4 +48,9 @@ class Blog extends Model
     {
         return $this->belongsTo(ChildCategory::class, 'child_category');
     }
+
+    public function seoMeta()
+    {
+        return $this->hasOne(SeoMeta::class);
+    }
 }
