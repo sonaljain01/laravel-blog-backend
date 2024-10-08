@@ -19,5 +19,4 @@ class SeoMeta extends Model
     {
         return $this->belongsTo(Blog::class);
     }
-
 }
