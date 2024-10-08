@@ -64,24 +64,23 @@ class AuthControllerTest extends TestCase
             ]);
     }
 
-    // public function test_email_verification()
-    // {
-    //     $user = User::factory()->create([
-    //         'email_verified_at' => null,
-    //         'remember_token' => $token = Str::random(20),
-    //     ]);
+    public function test_email_verification()
+    {
+        $user = User::factory()->create([
+            'remember_token' =>'randomToken',
+            'email_verified_at' => null,
+        ]);
 
-    //     // $this->assertNotNull($user->remember_token);
-    //     $response = $this->getJson('/api/verify/email/{$user->id}/$token');
+        $response = $this->getJson('/api/verify/email/'. $user->id . '/randomToken');
 
-    //     $response->assertStatus(200)
-    //         ->assertJson([
-    //             'success' => true,
-    //             'message' => 'Email verified successfully',
-    //         ]);
+        $response->assertStatus(200)
+                 ->assertJson([
+                     'success' => true,
+                     'message' => 'Email verified successfully',
+                 ]);
 
-    //     // $this->assertNotNull($user->email_verified_at);
-    // }
+        $this->assertNotNull($user->fresh()->email_verified_at);
+    }
 
     public function user_can_access_profile()
     {
