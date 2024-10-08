@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\User;
 use Http;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
