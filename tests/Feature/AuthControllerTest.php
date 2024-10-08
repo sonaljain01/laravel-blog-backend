@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\User;
 use Http;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -67,17 +66,17 @@ class AuthControllerTest extends TestCase
     public function test_email_verification()
     {
         $user = User::factory()->create([
-            'remember_token' =>'randomToken',
+            'remember_token' => 'randomToken',
             'email_verified_at' => null,
         ]);
 
-        $response = $this->getJson('/api/verify/email/'. $user->id . '/randomToken');
+        $response = $this->getJson('/api/verify/email/'.$user->id.'/randomToken');
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'success' => true,
-                     'message' => 'Email verified successfully',
-                 ]);
+            ->assertJson([
+                'success' => true,
+                'message' => 'Email verified successfully',
+            ]);
 
         $this->assertNotNull($user->fresh()->email_verified_at);
     }
