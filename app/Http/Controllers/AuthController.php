@@ -98,7 +98,7 @@ class AuthController extends Controller
 
         $user = User::where('id', $userId)->first();
 
-        if (!$user) {
+        if (! $user) {
             // \Log::info('User not found for ID: ' . $userId);
             return response()->json([
                 'success' => false,
@@ -106,7 +106,6 @@ class AuthController extends Controller
             ], 404);
         }
 
-        
         if ($user->remember_token != $token) {
             // \Log::info('Invalid token for user ID: ' . $userId . ' with token: ' . $token);
             return response()->json([

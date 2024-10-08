@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Http;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Http;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
@@ -19,6 +18,7 @@ class AuthControllerTest extends TestCase
         parent::setUp();
         Http::fake(); // Fake the external email service API
     }
+
     /**
      * A basic feature test example.
      */
@@ -122,6 +122,4 @@ class AuthControllerTest extends TestCase
                 ],
             ]);
     }
-
-    
 }

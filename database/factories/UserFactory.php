@@ -1,10 +1,11 @@
 <?php
 
 namespace Database\Factories;
-use App\Models\User;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
@@ -27,6 +28,4 @@ class UserFactory extends Factory
             'remember_token' => Str::random(20),
         ];
     }
-
-
 }

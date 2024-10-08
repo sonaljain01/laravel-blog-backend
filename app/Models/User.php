@@ -11,7 +11,6 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-
 class User extends Authenticatable implements HasMedia, JWTSubject
 {
     use HasApiTokens, HasFactory, InteractsWithMedia, Notifiable;
