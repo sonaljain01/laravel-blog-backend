@@ -5,11 +5,13 @@ namespace Tests\Unit;
 // use PHPUnit\Framework\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tests\TestCase;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic unit test example.
      */
@@ -24,10 +26,10 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'status' => true,
-                     'message' => 'User registered successfully, Please verify Your Email',
-                 ]);
+            ->assertJson([
+                'status' => true,
+                'message' => 'User registered successfully, Please verify Your Email',
+            ]);
     }
 
     public function test_user_can_login()
@@ -58,14 +60,13 @@ class AuthControllerTest extends TestCase
             'email_verified_at' => null,
         ]);
 
-        $response = $this->getJson('/api/verify/email/' . $user->id . '/randomToken');
+        $response = $this->getJson('/api/verify/email/'.$user->id.'/randomToken');
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'success' => true,
-                     'message' => 'Email verified successfully',
-                 ]);
-
+            ->assertJson([
+                'success' => true,
+                'message' => 'Email verified successfully',
+            ]);
 
         $this->assertNotNull($user->fresh()->email_verified_at);
     }
