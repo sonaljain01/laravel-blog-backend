@@ -20,8 +20,9 @@ class BlogController extends Controller
             ->paginate(10);
 
         // $returnData = [];
-        $returnData = $blogs->map(function($blog) {
+        $returnData = $blogs->map(function ($blog) {
             $seoMeta = $blog->seoMeta;
+
             return [
                 'id' => $blog->id,
                 'slug' => $blog->slug,
@@ -115,7 +116,7 @@ class BlogController extends Controller
     public function update(BlogUpdateRequest $request, string $slug, SeoMetaRequest $seoRequest)
     {
         $blog = Blog::where('slug', $slug)->where('user_id', auth()->user()->id)->first();
-        if (!$blog) {
+        if (! $blog) {
             $this->error = 'You are not allowed to update other person blog';
 
             return false;
@@ -127,11 +128,11 @@ class BlogController extends Controller
             'parent_category',
             'tag',
             'child_category',
-            'type'
+            'type',
         ]);
 
         $blog->seoMeta()->updateOrCreate(
-            ['blog_id' => $blog->id,],
+            ['blog_id' => $blog->id],
             [
                 'meta_title' => $seoRequest->meta_title ?? $blog->title,
                 'meta_description' => $seoRequest->meta_description ?? $blog->description,
@@ -143,13 +144,13 @@ class BlogController extends Controller
             $filldata['photo'] = $this->uploadImage($request->file('image'));
         }
         $sendData = [
-            'subject' => 'Blog with id.' . $slug . ' updated',
+            'subject' => 'Blog with id.'.$slug.' updated',
             'title' => $request->title,
             'description' => $request->description,
         ];
 
         $isUpdate = $blog->update($filldata);
-        if (!$isUpdate) {
+        if (! $isUpdate) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unable to update blog',
@@ -166,7 +167,7 @@ class BlogController extends Controller
 
     public function destroy(int $blog_id)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Please login to delete blog',
@@ -174,7 +175,7 @@ class BlogController extends Controller
         }
         $isBlogExist = Blog::find($blog_id);
 
-        if (!$isBlogExist) {
+        if (! $isBlogExist) {
             return response()->json([
                 'status' => false,
                 'message' => 'Blog not found',
@@ -212,14 +213,14 @@ class BlogController extends Controller
     {
         $blog = Blog::withTrashed()->find($blog_id);
 
-        if (!$blog) {
+        if (! $blog) {
             return response()->json([
                 'status' => false,
                 'message' => 'Blog not found',
             ]);
         }
 
-        if (!$blog->trashed()) {
+        if (! $blog->trashed()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Blog is not deleted',
@@ -239,7 +240,7 @@ class BlogController extends Controller
         // Find the blog including soft deleted ones
         $blog = Blog::withTrashed()->find($id);
 
-        if (!$blog) {
+        if (! $blog) {
             return response()->json([
                 'status' => false,
                 'message' => 'Blog not found',
@@ -258,7 +259,7 @@ class BlogController extends Controller
     public function displayuserBlog()
     {
         //only authenticate user can see their blog
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Please login first',
@@ -322,7 +323,7 @@ class BlogController extends Controller
         $blog = Blog::where('slug', $slug)
             ->with(['users:id,name,email,type', 'deletedBy:id,name', 'parentCategory:id,name', 'childCategory:id,name'])->first();
 
-        if (!$blog) {
+        if (! $blog) {
             return response()->json([
                 'status' => false,
                 'message' => 'Blog not found',
@@ -330,7 +331,7 @@ class BlogController extends Controller
         }
 
         if ($blog->draft) {
-            if (!auth()->check() || auth()->user()->id !== $blog->user_id) {
+            if (! auth()->check() || auth()->user()->id !== $blog->user_id) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized to view this blog',
@@ -354,7 +355,7 @@ class BlogController extends Controller
         $slug = Str::slug($title);
         $isBlogExist = Blog::where('slug', $slug)->first();
         if ($isBlogExist) {
-            $slug = $slug . '-' . rand(1000, 9999);
+            $slug = $slug.'-'.rand(1000, 9999);
         }
 
         return $slug;
