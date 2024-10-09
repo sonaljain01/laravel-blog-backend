@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Mockery;
-use Http;
-use  App\Models\User;
+use App\Models\User;
 use Hash;
+use Http;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery;
+use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
@@ -19,6 +19,7 @@ class AuthenticationTest extends TestCase
         Mockery::close();
         parent::tearDown();
     }
+
     /**
      * A basic feature test example.
      */
@@ -65,7 +66,7 @@ class AuthenticationTest extends TestCase
         $response = $this->postJson('/api/auth/login', [
             'email' => $user->email,
             'password' => 'password',
-            ]);
+        ]);
 
         $response->assertStatus(200)
             ->assertJson([

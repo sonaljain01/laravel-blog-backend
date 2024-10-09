@@ -29,14 +29,14 @@ abstract class DuskTestCase extends BaseTestCase
     {
         $options = (new ChromeOptions)->addArguments(
             collect([
-            $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
-            '--disable-search-engine-choice-screen',
-        ])->unless($this->hasHeadlessDisabled(), function (Collection $items) {
-            return $items->merge([
-                '--disable-gpu',
-                '--headless=new',
-            ]);
-        })->all());
+                $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
+                '--disable-search-engine-choice-screen',
+            ])->unless($this->hasHeadlessDisabled(), function (Collection $items) {
+                return $items->merge([
+                    '--disable-gpu',
+                    '--headless=new',
+                ]);
+            })->all());
 
         // $options = (new ChromeOptions)->addArguments([
         //     '--disable-gpu',
@@ -44,12 +44,11 @@ abstract class DuskTestCase extends BaseTestCase
         //     // Comment out the headless option
         //     // '--headless',
         // ]);
-    
 
         return RemoteWebDriver::create(
             'http://localhost:4444', DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             )
-        );    
+        );
     }
 }
