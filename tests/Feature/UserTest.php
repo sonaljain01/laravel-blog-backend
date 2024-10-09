@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\Blog;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
 class UserTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
@@ -45,6 +45,4 @@ class UserTest extends TestCase
             'email' => $user->email,
         ]);
     }
-
-    
 }

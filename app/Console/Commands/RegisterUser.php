@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Hash;
 use App\Models\User;
+use Hash;
+use Illuminate\Console\Command;
+
 class RegisterUser extends Command
 {
     /**
@@ -13,6 +14,7 @@ class RegisterUser extends Command
      * @var string
      */
     protected $signature = 'user:register {name} {email} {password} {type}';
+
     protected $description = 'Register a new user';
 
     /**
@@ -38,10 +40,10 @@ class RegisterUser extends Command
             'type' => $type,
         ]);
 
-        if($user) {
-            $this->info("User registered successfully");
-        }else {
-            $this->error("Failed to register user");
+        if ($user) {
+            $this->info('User registered successfully');
+        } else {
+            $this->error('Failed to register user');
         }
     }
 }
