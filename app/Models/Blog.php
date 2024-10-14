@@ -55,4 +55,12 @@ class Blog extends Model
     {
         return $this->hasOne(SeoMeta::class);
     }
+
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+        ];
+    }
 }
