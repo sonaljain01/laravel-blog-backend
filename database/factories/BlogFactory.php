@@ -2,14 +2,16 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Blog;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
 class BlogFactory extends Factory
 {
     protected $model = Blog::class;
+
     /**
      * Define the model's default state.
      *
@@ -26,7 +28,7 @@ class BlogFactory extends Factory
             'tag' => 1,
             'slug' => fake()->name(),
             'type' => 'publish',
-            'photo' => "https://cdn-icons-png.flaticon.com/512/4123/4123763.png",
+            'photo' => 'https://cdn-icons-png.flaticon.com/512/4123/4123763.png',
         ];
     }
 }
