@@ -363,7 +363,7 @@ class BlogController extends Controller
 
     public function search()
     {
-        $query = request('query'); 
+        $query = request('query');
 
         $blogs = Blog::search($query)->paginate(10); // Algolia search
         $returnData = $blogs->map(fn ($blog) => $this->formatBlogData($blog));
