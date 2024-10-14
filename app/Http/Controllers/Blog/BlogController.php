@@ -360,4 +360,45 @@ class BlogController extends Controller
 
         return $slug;
     }
+
+    public function search()
+    {
+        $query = request('query'); 
+
+        $blogs = Blog::search($query)->paginate(10); // Algolia search
+        $returnData = $blogs->map(fn ($blog) => $this->formatBlogData($blog));
+        $pagination = $this->getPaginationData($blogs);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Search results fetched successfully',
+            'data' => $returnData,
+            'pagination' => $pagination,
+        ]);
+    }
+
+    protected function getPaginationData($blogs)
+    {
+        return [
+            'next_page_url' => $blogs->nextPageUrl(),
+            'previous_page_url' => $blogs->previousPageUrl(),
+            'total' => $blogs->total(),
+        ];
+    }
+
+    protected function formatBlogData($blog)
+    {
+        return [
+            'id' => $blog->id,
+            'slug' => $blog->slug,
+            'title' => $blog->title,
+            'description' => $blog->description,
+            'photo' => $blog->photo,
+            'category' => $blog->parentCategory->name ?? '',
+            'sub_category' => $blog->childCategory->name ?? '',
+            'tag' => $blog->tag ?? '',
+            'created_at' => $blog->created_at,
+            // 'created_by' => $blog->users->name,
+        ];
+    }
 }
