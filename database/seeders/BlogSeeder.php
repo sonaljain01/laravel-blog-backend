@@ -12,7 +12,7 @@ class BlogSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Blog::factory(10)->create();
+        \App\Models\Blog::factory(200)->create();
 
     }
 }
