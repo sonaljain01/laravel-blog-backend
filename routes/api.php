@@ -31,6 +31,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('profile', [AuthController::class, 'profile']);
         Route::put('profile/update', [UpdateProfileController::class, 'updateProfile']);
         Route::get('logout', [AuthController::class, 'logout']);
+
     });
 });
 
@@ -42,6 +43,8 @@ Route::group(['prefix' => 'blog'], function () {
         Route::delete('delete/{id}', [BlogController::class, 'destroy']);
         Route::post('{id}/restore', [BlogController::class, 'restore']);
         Route::delete('{id}/force-delete', [BlogController::class, 'forceDelete']);
+
+     
     });
     Route::get('/', [BlogController::class, 'display']);
     Route::get('/{slug}', [BlogController::class, 'displaySpecificBlog']);
@@ -60,7 +63,7 @@ Route::group(['prefix' => 'admin/blog'], function () {
 });
 
 Route::group(['prefix' => 'category'], function () {
-    Route::group(['middleware' => 'auth:api'], function () {});
+    Route::group(['middleware' => 'auth:api'], function () { });
     Route::get('/', [CatrgoryController::class, 'display']);
     Route::post('create', [CatrgoryController::class, 'store']);
     Route::put('update/{id}', [CatrgoryController::class, 'update']);
@@ -68,7 +71,7 @@ Route::group(['prefix' => 'category'], function () {
 });
 
 Route::group(['prefix' => 'category/child'], function () {
-    Route::group(['middleware' => 'auth:api'], function () {});
+    Route::group(['middleware' => 'auth:api'], function () { });
     Route::get('/{id}', [ChildCatrgoryController::class, 'display']);
     Route::post('create', [ChildCatrgoryController::class, 'store']);
     Route::put('update/{id}', [ChildCatrgoryController::class, 'update']);
@@ -100,3 +103,4 @@ Route::group(['prefix' => 'rating'], function () {
     Route::get('/{id}', [RatingController::class, 'display']);
     Route::get('avg/{id}', [RatingController::class, 'displayavgRating']);
 });
+Route::get('search', [BlogController::class, 'search']);
